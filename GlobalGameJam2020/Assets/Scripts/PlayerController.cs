@@ -14,7 +14,9 @@ public class PlayerController: MonoBehaviour
     public LayerMask groundLayer;  // Tags all ground objects as a layer
 
     // Part Variables
-    public bool hasPart;
+    private bool hasPart;
+    private bool sexyLegs;
+    private bool springLegs;
 
     // Use this for initialization
     void Start()
@@ -34,14 +36,21 @@ public class PlayerController: MonoBehaviour
         // Store the current horizontal input in the float moveHorizontal.
         float moveHorizontal = Input.GetAxis("Horizontal");
 
-        // Store the current vertical input in the float moveVertical.
+        // Unnecessary Code
+        /*// Store the current vertical input in the float moveVertical.
         float moveVertical = Input.GetAxis("Vertical");
 
         // Use the two store floats to create a new Vector2 variable movement.
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
 
         // Call the AddForce function of our Rigidbody2D rb2d supplying movement multiplied by speed to move our player.
-        rb2d.AddForce(movement * speed);
+        rb2d.AddForce(movement * speed); */
+
+        // Left Input
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
+        {
+            rb2d.velocity = new Vector2(moveHorizontal * speed, rb2d.velocity.y);
+        }
 
         // Jump Input
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)

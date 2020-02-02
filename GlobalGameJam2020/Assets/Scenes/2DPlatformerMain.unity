@@ -262,10 +262,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22ae419a7df514c0e8db24daafcd96a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 3
   jumpHeight: 7
-  distToGround: 0
   isGrounded: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!58 &196996175
 CircleCollider2D:
   m_ObjectHideFlags: 0
