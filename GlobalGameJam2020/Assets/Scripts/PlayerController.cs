@@ -28,6 +28,12 @@ public class PlayerController: MonoBehaviour
     void Update()
     {
         isGrounded = Physics2D.OverlapArea(new Vector2(transform.position.x - 0.5f, transform.position.y - 0.5f), new Vector2(transform.position.x + 0.5f, transform.position.y + 0.5f), groundLayer);
+
+        // Jump Input
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            defaultJump(rb2d, jumpHeight);
+        }
     }
 
     // FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
@@ -50,12 +56,6 @@ public class PlayerController: MonoBehaviour
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
         {
             rb2d.velocity = new Vector2(moveHorizontal * speed, rb2d.velocity.y);
-        }
-
-        // Jump Input
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            defaultJump(rb2d, jumpHeight);
         }
     }
 
