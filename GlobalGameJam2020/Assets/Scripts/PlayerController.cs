@@ -10,19 +10,35 @@ public class PlayerController: MonoBehaviour
 
     // Jumping Variables
     public float jumpHeight;    // Floating point variable to store player's jumpHeight
-    public bool isGrounded; // Bool that checks if player is on the ground
+    private bool isGrounded; // Bool that checks if player is on the ground
     public LayerMask groundLayer;  // Tags all ground objects as a layer
 
     // Part Variables
     private bool hasPart;
-    private bool sexyLegs;
-    private bool springLegs;
+    private bool hasSexyLegs;
+    private bool hasSpringLegs;
+    private string isUsingNormal = "isUsingNormal";
+    private string isUsingSexy = "isUsingSexy";
+    private string isUsingSpring = "isUsingSpring";
+    private Dictionary<string, bool> isUsing = new Dictionary<string, bool>();
+    private List<string> usingKeys;
 
     // Use this for initialization
     void Start()
     {
         // Get and store a reference to the Rigidbody2D component so that we can access it.
         rb2d = GetComponent<Rigidbody2D>();
+
+        // Initializes a dictionary to store whether the robot is using a part or not
+        isUsing = new Dictionary<string, bool>()
+        {
+            {isUsingNormal, true},
+            {isUsingSexy, false},
+            {isUsingSpring, false},
+        };
+
+        // List of keys for iteration
+        usingKeys = new List<string>(isUsing.Keys);
     }
 
     void Update()
@@ -57,6 +73,24 @@ public class PlayerController: MonoBehaviour
         {
             rb2d.velocity = new Vector2(moveHorizontal * speed, rb2d.velocity.y);
         }
+
+        // Z input -> Use normal limbs
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            limbUpdate(isUsingNormal);
+        }
+
+        // X input -> Use sexy limbs
+        if (Input.GetKeyDown(KeyCode.X) && hasSexyLegs)
+        {
+            limbUpdate(isUsingSexy);
+        }
+
+        // C input -> Use spring limbs
+        if (Input.GetKeyDown(KeyCode.C) && hasSpringLegs)
+        {
+            limbUpdate(isUsingSpring);
+        }
     }
 
     // Default Jump Function
@@ -65,13 +99,43 @@ public class PlayerController: MonoBehaviour
         rb2d.velocity = Vector2.up * jumpHeight;
     }
 
+    private void limbUpdate(string limb)
+    {
+        foreach(string i in usingKeys)
+        {
+            if(i == limb)
+            {
+                Debug.Log(isUsing[i]);
+                isUsing[i] = true;
+            }
+            else
+            {
+                isUsing[i] = false;
+            }
+        } 
+    }
+
+    // Collider function
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("PickUp"))
         {
             jumpHeight *= 2;
-            other.gameObject.SetActive(false);
         }
+
+        if (other.gameObject.CompareTag("SexyLegs"))
+        {
+            Debug.Log("Has sexy legs!");
+            hasSexyLegs = true;
+        }
+
+        if (other.gameObject.CompareTag("SpringLegs"))
+        {
+            Debug.Log("Has spring legs!");
+            hasSpringLegs = true;
+        }
+
+        other.gameObject.SetActive(false);
     }
 
 }
